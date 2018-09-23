@@ -4,5 +4,5 @@ Hello All! So here is a github repo for all of our code. This is where we will p
 
 We will meet every Monday for the project. When we start programming I will create a scrum board for us to follow to see who is working on current features and for us to have a a backlog. 
 
-Thanks,
+Thank you,
 Ivy
