@@ -16,3 +16,6 @@ feature/API-bugfix
 feature/DB-tableaddition
 
 Whenever you want to merge a feature in develop branch, have at least one person review your code before merging. If its a major addition, have at least two people review the code. 
+
+Story Board:
+https://oasis.sandstorm.io/shared/Tb3iWMHj1TSpIUvLCCIHZfhdznE-NBVGw6IuT2ylXrU
