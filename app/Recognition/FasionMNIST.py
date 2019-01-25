@@ -39,16 +39,18 @@ def input_fn(filenames, train, batch_size=32, buffer_size=2048):
     images_batch, labels_batch = iterator.get_next()
 
     # The input-function must return a dict wrapping the images.
-    x = {'image': images_batch}
-    y = labels_batch
-
-    return x, y
+    return {'image': images_batch}, labels_batch
 
 def train_input_fn():
-    return input_fn(filenames="C:\\Users\\jimmy\\source\\repos\\image_to_TFRecord\\image_to_TFRecord\\TFREcord\\train.tfrecords", train=True)
+    #getting current path and adding extention for the path to the record
+    path = os.getcwd() + "\\TFREcord\\train.tfrecords"
+    return input_fn(filenames=path, train=True)
+    #return input_fn(filenames="C:\\Users\\jimmy\\source\\repos\\image_to_TFRecord\\image_to_TFRecord\\TFREcord\\train.tfrecords", train=True)
 
 def test_input_fn():
-    return input_fn(filenames="C:\\Users\\jimmy\\source\\repos\\image_to_TFRecord\\image_to_TFRecord\\TFREcord\\test.tfrecords", train=False)
+    path = os.getcwd() + "\\TFREcord\\test.tfrecords"
+    return input_fn(filenames=path, train=False)
+    #return input_fn(filenames="C:\\Users\\jimmy\\source\\repos\\image_to_TFRecord\\image_to_TFRecord\\TFREcord\\test.tfrecords", train=False)
 
 def delete_old_model():
     myfile="DNN_Model"
@@ -67,11 +69,9 @@ model = tf.estimator.DNNClassifier(feature_columns=feature_columns,
                                    dropout=0.1,
                                    n_classes=5,
                                    model_dir="DNN_Model")
-count = 0
-while (count < 5000):
+
+for _ in range(0,5000):
     model.train(input_fn=train_input_fn, steps = 1000)
     result = model.evaluate(input_fn=test_input_fn)
     print("Classification accuracy: {0:.2%}".format(result["accuracy"]))
     sys.stdout.flush()
-    count +=1
-
