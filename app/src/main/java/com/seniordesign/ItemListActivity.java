@@ -16,7 +16,7 @@ public class ItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
 
-        String[] foods = {"bacon", "ham", "cheese", "candy"};
+        String[] foods = {"Shop 1" , "Shop 2", "Shop 3 ", "Shop 4", "Shop 5 ", "Shop 6", "Shop 7"};
         ListAdapter myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, foods);
         ListView myListView = (ListView)findViewById(R.id.myListView);
         myListView.setAdapter(myAdapter);

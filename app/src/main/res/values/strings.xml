@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SeniorDesign</string>
+    <string name="FilePath">image</string>
 </resources>
