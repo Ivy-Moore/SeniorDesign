@@ -10,13 +10,22 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PHOTO = 2;
 
     private Button itemListButton;
+    private Button testAPIButton;
     private File mPhotoFile;
     private ImageView mPhotoView;
     private ImageButton cameraButton;
+    private TextView textView;
     UUID uuid;
 
     @Override
@@ -68,7 +79,37 @@ public class MainActivity extends AppCompatActivity {
         mPhotoView = findViewById(R.id.item_photo);
         updatePhotoView();
 
+        testAPIButton = findViewById(R.id.textButton);
+        testAPIButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    URL u1 = new URL("https://httpbin.org/get");
+                    HttpURLConnection uc1 = (HttpURLConnection) u1.openConnection();
+                    System.out.println("hello friends");
+                    System.out.println(uc1.getResponseCode());
 
+                    if (uc1.getResponseCode()==HttpURLConnection.HTTP_OK) {
+
+                        InputStream is = uc1.getInputStream();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+
+                            textView.append(line + "\n");
+
+                        }
+
+                    }//other codes
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+        textView = findViewById(R.id.testApi);
+        textView.setText("hello friends");
 
         itemListButton = findViewById(R.id.itemListButton);
         itemListButton.setOnClickListener(new View.OnClickListener() {
