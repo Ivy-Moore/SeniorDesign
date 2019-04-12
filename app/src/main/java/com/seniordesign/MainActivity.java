@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.preference.PreferenceActivity;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -17,17 +19,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         File filesDir = MainActivity.this.getFilesDir();
+        Log.d("tag", filesDir.getAbsolutePath());
         uuid = UUID.randomUUID();
         mPhotoFile = new File(filesDir, "IMG_" + uuid.toString() + ".jpg");
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -84,23 +96,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    URL u1 = new URL("https://httpbin.org/get");
-                    HttpURLConnection uc1 = (HttpURLConnection) u1.openConnection();
-                    System.out.println("hello friends");
-                    System.out.println(uc1.getResponseCode());
+//                    String myUrl = "http://10.0.2.2:5000/test";
+//                    //String to place our result in
+//                    String result;
+//                    //Instantiate new instance of our class
+//                    HttpGetRequest getRequest = new HttpGetRequest();
+//                    //Perform the doInBackground method, passing in our url
+//                    result = getRequest.execute(myUrl).get();
+//                    textView.append(result);
+                    RequestParams params = new RequestParams();
+                    try {
+                        params.put("pic", mPhotoFile);
+                    } catch(FileNotFoundException e) {}
 
-                    if (uc1.getResponseCode()==HttpURLConnection.HTTP_OK) {
+// send request
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    client.post("http://10.0.2.2:5000/test", params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                            // handle success response
+                            try {
 
-                        InputStream is = uc1.getInputStream();
-                        BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-                        String line;
-                        while ((line = br.readLine()) != null) {
+                                System.out.println(new String(bytes, "UTF-8"));
+                            } catch(Exception e) {
 
-                            textView.append(line + "\n");
-
+                            }
                         }
 
-                    }//other codes
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                            // handle failure response
+                        }
+                    });
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -138,6 +166,60 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private class HttpGetRequest extends AsyncTask<String, Void, String> {
+
+        public static final String REQUEST_METHOD = "GET";
+        public static final int READ_TIMEOUT = 15000;
+        public static final int CONNECTION_TIMEOUT = 15000;
+
+        @Override
+        protected String doInBackground(String... params) {
+            String stringUrl = params[0];
+            String result = "";
+            String inputLine;
+
+            try {
+                //Create a URL object holding our url
+                URL myUrl = new URL(stringUrl);
+                //Create a connection
+                HttpURLConnection connection =(HttpURLConnection)
+                        myUrl.openConnection();
+
+                //Set methods and timeouts
+                connection.setRequestMethod(REQUEST_METHOD);
+                connection.setReadTimeout(READ_TIMEOUT);
+                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+                //Connect to our url
+                connection.connect();
+                //Create a new InputStreamReader
+                InputStreamReader streamReader = new
+                        InputStreamReader(connection.getInputStream());
+                //Create a new buffered reader and String Builder
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                //Check if the line we are reading is not null
+                while((inputLine = reader.readLine()) != null){
+                    stringBuilder.append(inputLine);
+                }
+                //Close our InputStream and Buffered reader
+                reader.close();
+                streamReader.close();
+                //Set our result equal to our stringBuilder
+                result = stringBuilder.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String clothes) {
+            super.onPostExecute(clothes);
+            System.out.println(clothes);
+        }
+
     }
 
     @Override
