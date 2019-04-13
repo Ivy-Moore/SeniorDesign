@@ -12,9 +12,12 @@ import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -35,6 +38,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,10 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button itemListButton;
     private Button testAPIButton;
+    private Button submitButton;
     private File mPhotoFile;
     private ImageView mPhotoView;
     private ImageButton cameraButton;
     private TextView textView;
+    private TextView apiResultsTextView;
+    private EditText choiceText;
+    private String choice;
     UUID uuid;
 
     @Override
@@ -96,14 +104,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-//                    String myUrl = "http://10.0.2.2:5000/test";
-//                    //String to place our result in
-//                    String result;
-//                    //Instantiate new instance of our class
-//                    HttpGetRequest getRequest = new HttpGetRequest();
-//                    //Perform the doInBackground method, passing in our url
-//                    result = getRequest.execute(myUrl).get();
-//                    textView.append(result);
                     RequestParams params = new RequestParams();
                     try {
                         params.put("pic", mPhotoFile);
@@ -116,7 +116,10 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                             // handle success response
                             try {
-
+                                String[] arr = new String(bytes, "UTF-8").split("\n");
+                                System.out.println(Arrays.toString(arr));
+                                apiResultsTextView.setText(Arrays.toString(arr));
+                                Log.d("prediction",new String(bytes, "UTF-8" ));
                                 System.out.println(new String(bytes, "UTF-8"));
                             } catch(Exception e) {
 
@@ -136,8 +139,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        textView = findViewById(R.id.testApi);
-        textView.setText("hello friends");
+        apiResultsTextView = findViewById(R.id.apiResults);
+        apiResultsTextView.setText("no results yet");
+        choiceText = findViewById(R.id.choiceText);
+        choiceText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                choice = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+        submitButton = findViewById(R.id.submitButton);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    RequestParams params = new RequestParams();
+                    Log.d("choice",choice);
+                    try {
+                        params.put("choice", choice);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+
+// send request
+                    AsyncHttpClient client = new AsyncHttpClient();
+                    client.post("http://10.0.2.2:5000/getResults", params, new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
+                            // handle success response
+                            try {
+                                String[] arr = new String(bytes, "UTF-8").split("\n");
+                                System.out.println(Arrays.toString(arr));
+                                apiResultsTextView.setText(Arrays.toString(arr));
+                                Log.d("prediction",new String(bytes, "UTF-8" ));
+                                System.out.println(new String(bytes, "UTF-8"));
+                            } catch(Exception e) {
+
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] bytes, Throwable throwable) {
+                            // handle failure response
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
         itemListButton = findViewById(R.id.itemListButton);
         itemListButton.setOnClickListener(new View.OnClickListener() {
