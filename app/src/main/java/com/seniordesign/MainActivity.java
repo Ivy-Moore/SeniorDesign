@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private String choice;
     UUID uuid;
 
+    final String URL = "https://acoustic-scarab-232721.appspot.com/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         mPhotoFile = new File(filesDir, "IMG_" + uuid.toString() + ".jpg");
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(getPackageManager()) != null;
-        final String URL = "https://acoustic-scarab-232721.appspot.com/";
+
 
         cameraButton = findViewById(R.id.cameraButton);
 

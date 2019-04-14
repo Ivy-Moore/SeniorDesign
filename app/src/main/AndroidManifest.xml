@@ -34,6 +34,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".IntroActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ResultsActivity"
+            android:parentActivityName=".HistoryActivity" />
+        <activity
+            android:name=".LocationActivity"
+            android:parentActivityName=".ResultsActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".HistoryActivity"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".HomeActivity" />
+        <activity android:name=".AboutActivity"
+            android:parentActivityName=".HomeActivity"></activity>
     </application>
 
 </manifest>
