@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         mPhotoFile = new File(filesDir, "IMG_" + uuid.toString() + ".jpg");
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(getPackageManager()) != null;
+        final String URL = "https://acoustic-scarab-232721.appspot.com/";
 
         cameraButton = findViewById(R.id.cameraButton);
 
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 // send request
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.post("http://10.0.2.2:5000/test", params, new AsyncHttpResponseHandler() {
+                    client.post(URL + "test", params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                             // handle success response
@@ -175,7 +176,10 @@ public class MainActivity extends AppCompatActivity {
 
 // send request
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.post("http://10.0.2.2:5000/getResults", params, new AsyncHttpResponseHandler() {
+                    client.setTimeout(20 * 1000);
+                    client.setConnectTimeout(20*1000);
+                    client.setResponseTimeout(20*1000);
+                    client.post(URL + "getResults", params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                             // handle success response
@@ -232,59 +236,59 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class HttpGetRequest extends AsyncTask<String, Void, String> {
-
-        public static final String REQUEST_METHOD = "GET";
-        public static final int READ_TIMEOUT = 15000;
-        public static final int CONNECTION_TIMEOUT = 15000;
-
-        @Override
-        protected String doInBackground(String... params) {
-            String stringUrl = params[0];
-            String result = "";
-            String inputLine;
-
-            try {
-                //Create a URL object holding our url
-                URL myUrl = new URL(stringUrl);
-                //Create a connection
-                HttpURLConnection connection =(HttpURLConnection)
-                        myUrl.openConnection();
-
-                //Set methods and timeouts
-                connection.setRequestMethod(REQUEST_METHOD);
-                connection.setReadTimeout(READ_TIMEOUT);
-                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-                //Connect to our url
-                connection.connect();
-                //Create a new InputStreamReader
-                InputStreamReader streamReader = new
-                        InputStreamReader(connection.getInputStream());
-                //Create a new buffered reader and String Builder
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                //Check if the line we are reading is not null
-                while((inputLine = reader.readLine()) != null){
-                    stringBuilder.append(inputLine);
-                }
-                //Close our InputStream and Buffered reader
-                reader.close();
-                streamReader.close();
-                //Set our result equal to our stringBuilder
-                result = stringBuilder.toString();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String clothes) {
-            super.onPostExecute(clothes);
-            System.out.println(clothes);
-        }
-
-    }
+//    private class HttpGetRequest extends AsyncTask<String, Void, String> {
+//
+//        public static final String REQUEST_METHOD = "GET";
+//        public static final int READ_TIMEOUT = 15000;
+//        public static final int CONNECTION_TIMEOUT = 15000;
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            String stringUrl = params[0];
+//            String result = "";
+//            String inputLine;
+//
+//            try {
+//                //Create a URL object holding our url
+//                URL myUrl = new URL(stringUrl);
+//                //Create a connection
+//                HttpURLConnection connection =(HttpURLConnection)
+//                        myUrl.openConnection();
+//
+//                //Set methods and timeouts
+//                connection.setRequestMethod(REQUEST_METHOD);
+//                connection.setReadTimeout(READ_TIMEOUT);
+//                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+//                //Connect to our url
+//                connection.connect();
+//                //Create a new InputStreamReader
+//                InputStreamReader streamReader = new
+//                        InputStreamReader(connection.getInputStream());
+//                //Create a new buffered reader and String Builder
+//                BufferedReader reader = new BufferedReader(streamReader);
+//                StringBuilder stringBuilder = new StringBuilder();
+//                //Check if the line we are reading is not null
+//                while((inputLine = reader.readLine()) != null){
+//                    stringBuilder.append(inputLine);
+//                }
+//                //Close our InputStream and Buffered reader
+//                reader.close();
+//                streamReader.close();
+//                //Set our result equal to our stringBuilder
+//                result = stringBuilder.toString();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return result;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String clothes) {
+//            super.onPostExecute(clothes);
+//            System.out.println(clothes);
+//        }
+//
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
