@@ -186,15 +186,15 @@ public class MainActivity extends AppCompatActivity {
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                             // handle success response
                             try {
-                                String[] arr = new String(bytes, "UTF-8").split("\n");
-                                System.out.println(Arrays.toString(arr));
+                                String response = new String(bytes, "UTF-8");
+                                String[] arr = response.split("\n");
+                                System.out.println(response);
                                 apiResultsTextView.setText(Arrays.toString(arr));
                                 Log.d("prediction",new String(bytes, "UTF-8" ));
-                                System.out.println(new String(bytes, "UTF-8"));
 
                                 Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-                                String httpStr = apiResultsTextView.getText().toString();
-                                intent.putExtra("http_string", httpStr);
+//                                String httpStr = apiResultsTextView.getText().toString();
+                                intent.putExtra("http_string", response);
                                 startActivity(intent);
 
                             } catch(Exception e) {
