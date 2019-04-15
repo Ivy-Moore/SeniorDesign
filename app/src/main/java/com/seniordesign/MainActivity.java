@@ -47,9 +47,7 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_PHOTO = 2;
-
-    private Button itemListButton;
-    private Button testAPIButton;
+    private Button sendPictureToServerButton;
     private Button submitButton;
     private File mPhotoFile;
     private ImageView mPhotoView;
@@ -102,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
         mPhotoView = findViewById(R.id.item_photo);
         updatePhotoView();
 
-        testAPIButton = findViewById(R.id.textButton);
-        testAPIButton.setOnClickListener(new View.OnClickListener() {
+        sendPictureToServerButton = findViewById(R.id.textButton);
+        sendPictureToServerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -114,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                    send request
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.post(URL + "test", params, new AsyncHttpResponseHandler() {
+                    client.post(URL + "picture", params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
                             // handle success response
@@ -178,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
 
 // send request
                     AsyncHttpClient client = new AsyncHttpClient();
-                    client.setTimeout(20 * 1000);
-                    client.setConnectTimeout(20*1000);
-                    client.setResponseTimeout(20*1000);
+                    client.setTimeout(10 * 1000);
+                    client.setConnectTimeout(10*1000);
+                    client.setResponseTimeout(10*1000);
                     client.post(URL + "getResults", params, new AsyncHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] bytes) {
@@ -188,17 +186,17 @@ public class MainActivity extends AppCompatActivity {
                             try {
                                 String response = new String(bytes, "UTF-8");
                                 String[] arr = response.split("\n");
-                                System.out.println(response);
-                                apiResultsTextView.setText(Arrays.toString(arr));
+//                                System.out.println(response);
+                                apiResultsTextView.setText(response);
                                 Log.d("prediction",new String(bytes, "UTF-8" ));
 
-                                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                                Intent intent = new Intent(MainActivity.this, ItemListActivity.class);
 //                                String httpStr = apiResultsTextView.getText().toString();
                                 intent.putExtra("http_string", response);
                                 startActivity(intent);
 
                             } catch(Exception e) {
-
+                                e.printStackTrace();
                             }
                         }
 
@@ -214,15 +212,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            }
-        });
-
-        itemListButton = findViewById(R.id.itemListButton);
-        itemListButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ItemListActivity.class);
-                startActivity(intent);
             }
         });
 

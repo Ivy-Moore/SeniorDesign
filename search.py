@@ -14,7 +14,7 @@ class Item:
         self.link = link
 
     def __repr__(self):
-        return "title:{0},link:{1}".format(self.title, self.link)
+        return "title:{0}#link:{1}".format(self.title, self.link)
 
 
 def google_search(search_term, api_key, cse_id, **kwargs):
