@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +34,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
     private String getLink(String item) {
+        System.out.println(item);
         String[] linkSplit = item.split(delimiter)[1].split(":");
         if (linkSplit.length < 3) {
             return null;
@@ -41,7 +43,7 @@ public class ItemListActivity extends AppCompatActivity {
     }
 
 
-    final static String delimiter = ",";
+    final static String delimiter = "~";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +56,11 @@ public class ItemListActivity extends AppCompatActivity {
 
         for (String item : httpStrSplit) {
             String title = item.split(delimiter)[0].split(":")[1];
-            System.out.println(getLink(item));
             String link = getLink(item);
             if (link == null) {
                 continue;
             }
+            System.out.println(getLink(item));
             items.add(new Item(title, link).toString());
         }
 //
@@ -76,11 +78,23 @@ public class ItemListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String item = String.valueOf(parent.getItemAtPosition(position));
                         StringBuilder sb = new StringBuilder();
-                        String[] linkSplit = item.split(delimiter)[1].split("-");
-                        for (int i = 1; i < linkSplit.length; i++) {
+                        String[] linkSplit = item.split(",");
+                        int i = 0;
+                        while (i < linkSplit.length) {
+                            if (linkSplit[i].startsWith(" Link")) {
+                                break;
+                            }
+                            i++;
+                        }
+
+                        linkSplit = item.split(",")[i].split("-");
+
+//                        System.out.println("link - " + Arrays.toString(linkSplit));
+                        for (i = 1; i < linkSplit.length; i++) {
                             sb.append(linkSplit[i]);
                         }
                         String link = sb.toString().trim();
+//                        System.out.println("link - " + link);
 //                        Toast.makeText(ItemListActivity.this, link, Toast.LENGTH_LONG).show();
 
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
