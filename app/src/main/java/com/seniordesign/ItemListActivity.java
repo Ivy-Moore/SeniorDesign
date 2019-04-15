@@ -92,9 +92,11 @@ public class ItemListActivity extends AppCompatActivity {
 //                        System.out.println("link - " + Arrays.toString(linkSplit));
                         for (i = 1; i < linkSplit.length; i++) {
                             sb.append(linkSplit[i]);
+                            sb.append("-");
                         }
+                        sb.setLength(sb.length()-1);
                         String link = sb.toString().trim();
-//                        System.out.println("link - " + link);
+                        System.out.println("link - " + link);
 //                        Toast.makeText(ItemListActivity.this, link, Toast.LENGTH_LONG).show();
 
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
