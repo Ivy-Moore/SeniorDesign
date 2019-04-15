@@ -192,7 +192,10 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("prediction",new String(bytes, "UTF-8" ));
                                 System.out.println(new String(bytes, "UTF-8"));
 
-
+                                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                                String httpStr = apiResultsTextView.getText().toString();
+                                intent.putExtra("http_string", httpStr);
+                                startActivity(intent);
 
                             } catch(Exception e) {
 
@@ -208,10 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-                String httpStr = apiResultsTextView.getText().toString();
-                intent.putExtra("http_string", httpStr);
-                startActivity(intent);
+
 
 
             }
