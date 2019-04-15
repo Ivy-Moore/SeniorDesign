@@ -17,7 +17,7 @@ def google_search(search_term, api_key, cse_id, **kwargs):
 
 @app.route('/test', methods = ['POST', 'GET'])
 def test():
-    image_path = "demofile2.jpg"
+    image_path = "clothes.jpg"
     result_path = 'results.txt'
     graph_path = 'tf_files/retrained_graph.pb'
 
@@ -27,11 +27,11 @@ def test():
         f.write(line)
     f.close()
 
-    command = 'python -m scripts.label_image --graph=' + graph_path + ' --image=' + image_path + ' > ' + result_path
-    os.system(command)
-    result_file = open(result_path, 'r')
-    prediction = str(result_file.read())
-    return prediction
+    # command = 'python -m scripts.label_image --graph=' + graph_path + ' --image=' + image_path + ' > ' + result_path
+    # os.system(command)
+    # result_file = open(result_path, 'r')
+    # prediction = str(result_file.read())
+    return str(file.read())
 
 
 

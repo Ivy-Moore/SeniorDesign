@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         params.put("pic", mPhotoFile);
                     } catch(FileNotFoundException e) {}
 
-// send request
+//                    send request
                     AsyncHttpClient client = new AsyncHttpClient();
                     client.post(URL + "test", params, new AsyncHttpResponseHandler() {
                         @Override
