@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         submitButton = findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 try {
                     RequestParams params = new RequestParams();
                     Log.d("choice",choice);
@@ -191,6 +191,9 @@ public class MainActivity extends AppCompatActivity {
                                 apiResultsTextView.setText(Arrays.toString(arr));
                                 Log.d("prediction",new String(bytes, "UTF-8" ));
                                 System.out.println(new String(bytes, "UTF-8"));
+
+
+
                             } catch(Exception e) {
 
                             }
@@ -205,6 +208,11 @@ public class MainActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                String httpStr = apiResultsTextView.getText().toString();
+                intent.putExtra("http_string", httpStr);
+                startActivity(intent);
+
 
             }
         });
@@ -219,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
