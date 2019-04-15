@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#DA073A</color>
+    <color name="colorPrimaryDark">#A00015</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorBlack">#000000</color>
+
+
+    <color name="colorHomeDark">#002C56</color>
+    <color name="colorHomeMid">#005483</color>
+    <color name="colorHomeLight">#4880B3</color>
+
+    <color name="colorGrayDark">#A9A9A9</color>
+    <color name="colorGrayLight">#DCDCDC</color>
+
+
+
+    <!--  colors for tab and screen-->
+    <color name="colorDarkBlue">#002C56</color>
+</resources>
