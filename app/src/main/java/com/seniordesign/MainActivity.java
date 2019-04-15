@@ -58,8 +58,10 @@ public class MainActivity extends AppCompatActivity {
     private String choice;
     UUID uuid;
 
-    final String URL = "https://acoustic-scarab-232721.appspot.com/";
+    int pictureChoice;
 
+//    final String URL = "https://acoustic-scarab-232721.appspot.com/";
+    final String URL = "http://10.0.2.2:5000/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,21 +81,23 @@ public class MainActivity extends AppCompatActivity {
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = FileProvider.getUriForFile(MainActivity.this,
-                        "com.seniordesign.fileprovider",
-                        mPhotoFile);
-                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-                List<ResolveInfo> cameraActivities = MainActivity.this
-                        .getPackageManager().queryIntentActivities(captureImage,
-                                PackageManager.MATCH_DEFAULT_ONLY);
-
-                for (ResolveInfo activity : cameraActivities) {
-                    MainActivity.this.grantUriPermission(activity.activityInfo.packageName,
-                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                }
-
-                startActivityForResult(captureImage, REQUEST_PHOTO);
+                //TODO: delete pickImage() later
+                pickImage();
+//                Uri uri = FileProvider.getUriForFile(MainActivity.this,
+//                        "com.seniordesign.fileprovider",
+//                        mPhotoFile);
+//                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//
+//                List<ResolveInfo> cameraActivities = MainActivity.this
+//                        .getPackageManager().queryIntentActivities(captureImage,
+//                                PackageManager.MATCH_DEFAULT_ONLY);
+//
+//                for (ResolveInfo activity : cameraActivities) {
+//                    MainActivity.this.grantUriPermission(activity.activityInfo.packageName,
+//                            uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+//                }
+//
+//                startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
 
@@ -217,7 +221,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    public void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("scale", true);
+        intent.putExtra("outputX", 256);
+        intent.putExtra("outputY", 256);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 1);
+    }
 
     private void updatePhotoView() {
         if (mPhotoFile == null || !mPhotoFile.exists()) {
@@ -237,66 +253,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    private class HttpGetRequest extends AsyncTask<String, Void, String> {
-//
-//        public static final String REQUEST_METHOD = "GET";
-//        public static final int READ_TIMEOUT = 15000;
-//        public static final int CONNECTION_TIMEOUT = 15000;
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            String stringUrl = params[0];
-//            String result = "";
-//            String inputLine;
-//
-//            try {
-//                //Create a URL object holding our url
-//                URL myUrl = new URL(stringUrl);
-//                //Create a connection
-//                HttpURLConnection connection =(HttpURLConnection)
-//                        myUrl.openConnection();
-//
-//                //Set methods and timeouts
-//                connection.setRequestMethod(REQUEST_METHOD);
-//                connection.setReadTimeout(READ_TIMEOUT);
-//                connection.setConnectTimeout(CONNECTION_TIMEOUT);
-//                //Connect to our url
-//                connection.connect();
-//                //Create a new InputStreamReader
-//                InputStreamReader streamReader = new
-//                        InputStreamReader(connection.getInputStream());
-//                //Create a new buffered reader and String Builder
-//                BufferedReader reader = new BufferedReader(streamReader);
-//                StringBuilder stringBuilder = new StringBuilder();
-//                //Check if the line we are reading is not null
-//                while((inputLine = reader.readLine()) != null){
-//                    stringBuilder.append(inputLine);
-//                }
-//                //Close our InputStream and Buffered reader
-//                reader.close();
-//                streamReader.close();
-//                //Set our result equal to our stringBuilder
-//                result = stringBuilder.toString();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return result;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String clothes) {
-//            super.onPostExecute(clothes);
-//            System.out.println(clothes);
-//        }
-//
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
-
         if (requestCode == REQUEST_PHOTO) {
             Uri uri = FileProvider.getUriForFile(MainActivity.this,
                     "com.seniordesign.fileprovider",
@@ -306,6 +268,35 @@ public class MainActivity extends AppCompatActivity {
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             updatePhotoView();
+        } else if (requestCode == 1) {
+            //TODO:very hacky, delete this later
+            final Bundle extras = data.getExtras();
+
+            System.out.println("IN PICTURE MODULE");
+            //Get image
+
+            Bitmap bitmap = null;
+            try {
+                if(data.getData()==null){
+                    bitmap = (Bitmap)data.getExtras().get("data");
+                }else{
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), data.getData());
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            mPhotoView.setImageBitmap(bitmap);
+            try{
+                FileOutputStream fOut = new FileOutputStream(mPhotoFile);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 85, fOut);
+                fOut.flush();
+                fOut.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }
