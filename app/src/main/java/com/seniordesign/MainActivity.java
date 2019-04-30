@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView apiResultsTextView;
     private EditText choiceText;
     private String choice;
+    private String clothing = " clothing";
     UUID uuid;
 
     int pictureChoice;
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 choice = s.toString();
+                clothing = choice + " clothing";
             }
 
             @Override
@@ -174,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     RequestParams params = new RequestParams();
                     Log.d("choice",choice);
                     try {
-                        params.put("choice", choice);
+                        params.put("choice", clothing);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }

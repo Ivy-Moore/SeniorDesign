@@ -1,0 +1,5 @@
+leggings (score=0.33464)
+sweatshorts (score=0.25998)
+culottes (score=0.20478)
+joggers (score=0.11986)
+jeans (score=0.02621)
