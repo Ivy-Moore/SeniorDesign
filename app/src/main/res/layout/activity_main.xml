@@ -7,13 +7,16 @@
     tools:context=".MainActivity">
 
 
+
     <ImageButton
         android:id="@+id/cameraButton"
-        android:layout_width="195dp"
+        android:layout_width="match_parent"
+        android:background="@color/colorHomeDark"
         android:layout_height="42dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
+
         android:src="@android:drawable/ic_menu_camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,25 +24,28 @@
 
     <ImageView
         android:id="@+id/item_photo"
-        android:layout_width="187dp"
-        android:layout_height="99dp"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorHomeMid"
         android:cropToPadding="true"
         android:scaleType="centerInside"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cameraButton" />
 
     <Button
         android:id="@+id/textButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="44dp"
+        android:background="@color/colorHomeLight"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
+        android:textColor="@color/colorWhite"
         android:text="Identify Clothing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -51,7 +57,7 @@
         android:layout_width="286dp"
         android:layout_height="101dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
@@ -67,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="44dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
@@ -80,12 +86,14 @@
 
     <Button
         android:id="@+id/submitButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:background="@color/colorHomeLight"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Submit choice"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
