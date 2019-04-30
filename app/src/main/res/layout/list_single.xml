@@ -7,6 +7,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="15dp"
+    android:paddingRight="10dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/shape"
     android:orientation="vertical">
 
     <TextView
@@ -15,18 +20,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="25dp"
+        android:textColor="@color/colorWhite"
         android:text="Title" />
 
     <TextView
         android:id="@+id/price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
         android:text="Price" />
 
     <TextView
         android:id="@+id/link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
         android:text="Link" />
 
 </LinearLayout>

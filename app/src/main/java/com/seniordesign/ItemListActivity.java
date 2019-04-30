@@ -66,6 +66,8 @@ public class ItemListActivity extends AppCompatActivity {
 
         CustomList myAdapter = new CustomList(this, items);
         ListView myListView = (ListView)findViewById(R.id.myListView);
+        myListView.setDivider(null);
+        myListView.setDividerHeight(0);
         myListView.setAdapter(myAdapter);
 
         myListView.setOnItemClickListener(
