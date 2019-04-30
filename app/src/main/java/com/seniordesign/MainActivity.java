@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceActivity;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPhotoView = findViewById(R.id.item_photo);
         updatePhotoView();
+        mPhotoView.setImageResource(R.drawable.ic_android_black_24dp);
 
         sendPictureToServerButton = findViewById(R.id.textButton);
         sendPictureToServerButton.setOnClickListener(new View.OnClickListener() {
