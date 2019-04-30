@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ItemListActivity extends AppCompatActivity {
 
-    private class Item {
+    public class Item {
         String title;
         String link;
 
@@ -52,23 +52,19 @@ public class ItemListActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String httpStr = bundle.getString("http_string");
         String[] httpStrSplit = httpStr.split("\n");
-        List<String> items = new ArrayList<>();
-
+//        List<String> items = new ArrayList<>();
+        List<Item> items = new ArrayList<>();
         for (String item : httpStrSplit) {
             String title = item.split(delimiter)[0].split(":")[1];
             String link = getLink(item);
             if (link == null) {
                 continue;
             }
-            System.out.println(getLink(item));
-            items.add(new Item(title, link).toString());
+//            items.add(new Item(title, link).toString());
+            items.add(new Item(title, link));
         }
-//
-//        for (String item : items) {
-//            System.out.println(item);
-//        }
-//
-        ListAdapter myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+
+        CustomList myAdapter = new CustomList(this, items);
         ListView myListView = (ListView)findViewById(R.id.myListView);
         myListView.setAdapter(myAdapter);
 

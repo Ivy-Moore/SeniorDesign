@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
         mPhotoView = findViewById(R.id.item_photo);
         updatePhotoView();
-        mPhotoView.setImageResource(R.drawable.ic_android_black_24dp);
+//        mPhotoView.setImageResource(R.drawable.ic_android_black_24dp);
 
         sendPictureToServerButton = findViewById(R.id.textButton);
         sendPictureToServerButton.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-// send request
+                    // send request
                     AsyncHttpClient client = new AsyncHttpClient();
                     client.setTimeout(10 * 1000);
                     client.setConnectTimeout(10*1000);
