@@ -47,6 +47,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 3;
     private static final int REQUEST_PHOTO = 2;
     private Button sendPictureToServerButton;
     private Button submitButton;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     int pictureChoice;
 
-//    final String URL = "https://acoustic-scarab-232721.appspot.com/";
+    //    final String URL = "https://acoustic-scarab-232721.appspot.com/";
     final String URL = "http://10.0.2.2:5000/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         uuid = UUID.randomUUID();
         mPhotoFile = new File(filesDir, "IMG_" + uuid.toString() + ".jpg");
         final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(getPackageManager()) != null;
+        final boolean canTakePhoto = mPhotoFile != null && captureImage.resolveActivity(getPackageManager()) != null;
 
 
         cameraButton = findViewById(R.id.cameraButton);
@@ -84,7 +85,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO: delete pickImage() later
-                pickImage();
+                if (canTakePhoto){
+                    startActivityForResult(captureImage, REQUEST_IMAGE_CAPTURE);
+                }
+                else{
+                    pickImage();
+                }
+
 //                Uri uri = FileProvider.getUriForFile(MainActivity.this,
 //                        "com.seniordesign.fileprovider",
 //                        mPhotoFile);
@@ -273,7 +280,20 @@ public class MainActivity extends AppCompatActivity {
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             updatePhotoView();
-        } else if (requestCode == 1) {
+
+        }
+        else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mPhotoView.setImageBitmap(imageBitmap);
+            int re_width = mPhotoView.getWidth();
+            int re_height = mPhotoView.getHeight();
+            Bitmap newBM = Bitmap.createScaledBitmap(imageBitmap, re_width - 50,  re_height - 50, false);
+
+
+            mPhotoView.setImageBitmap(newBM);
+        }
+        else if (requestCode == 1) {
             //TODO:very hacky, delete this later
             final Bundle extras = data.getExtras();
 
